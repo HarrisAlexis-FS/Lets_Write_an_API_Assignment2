@@ -1,0 +1,29 @@
+const express = require('express');
+const { universityService, universityServiceByCountry } = require('../services/universityService');
+const universityRouter = express.Router();
+
+universityRouter.get('/',(req,res,next) => {
+    universityService().then(result => {
+        res.status(200).json(result.data)
+    }).catch(err => {
+        res.status(500).json({
+            error: {
+                message: err.message
+            },
+        });
+    });
+});
+
+universityRouter.get('/:country', (req,res,next) => {
+    universityServiceByCountry(req.params.country).then((result) => {
+        res.status(200).json(result.data);
+    }).catch((err) => {
+        res.status(500).json({
+           error:{
+            message: 'Not found'
+           },
+        });
+    });
+});
+
+module.exports = universityRouter;
